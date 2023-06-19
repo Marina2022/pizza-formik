@@ -27,6 +27,7 @@ const Search = () => {
   const onCancelClick = () => {
     dispatch(setSearch(''))
     searchRef.current.focus()
+    setVal('')
   }
 
   return (

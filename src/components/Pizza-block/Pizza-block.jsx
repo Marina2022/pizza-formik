@@ -1,12 +1,19 @@
 import {useState} from "react";
 import {pizzaTypes} from "../../consts";
 import classNames from 'classnames';
+import {useDispatch} from "react-redux";
+import {addProduct} from "../../redux/store/cartSlice";
+import {Link} from "react-router-dom";
 
-const PizzaBlock = ({title, price, imageUrl, types, sizes, category, rating}) => {
+const PizzaBlock = ({id, title, price, imageUrl, types, sizes, category, rating}) => {
+
+
   const [pizzaQuantity, setPizzaQuantity] = useState(0);
-
   const [pizzaType, setPizzaType] = useState(0);
   const [currentSize, setCurrentSize] = useState(0);
+
+  const dispatch = useDispatch()
+
   const onPizzaTypeClick = (type) => {
     setPizzaType(type);
   }
@@ -14,15 +21,23 @@ const PizzaBlock = ({title, price, imageUrl, types, sizes, category, rating}) =>
     setCurrentSize(size);
   }
 
+  const onAddClick = () => {
+    setPizzaQuantity((prev) => prev + 1)
+    dispatch(addProduct({
+      id, title, price, imageUrl, type: pizzaTypes[pizzaType], size: sizes[currentSize]
+    }))
+
+  }
+
   return (
-    <div className="pizza-block">
+    <div className="pizzaBlock">
       <img
-        className="pizza-block__image"
+        className="pizzaBlock__image"
         src={imageUrl}
         alt="Pizza"
       />
-      <h4 className="pizza-block__title">{title}</h4>
-      <div className="pizza-block__selector">
+      <Link to={'/pizzas/' + id} className="pizzaLink" ><h4 className="pizzaBlock__title">{title}</h4></Link>
+      <div className="pizzaBlock__selector">
         <ul>
           {types.map((type) =>
             <li key={type} onClick={() => onPizzaTypeClick(type)} className={classNames({
@@ -31,14 +46,14 @@ const PizzaBlock = ({title, price, imageUrl, types, sizes, category, rating}) =>
           )}
         </ul>
         <ul>
-          {sizes.map((size, index)=><li onClick={()=>onSizeClick(index)} key={index} className={classNames({'active': index===currentSize})}>{size} см.</li>
+          {sizes.map((size, index) => <li onClick={() => onSizeClick(index)} key={index}
+                                          className={classNames({'active': index === currentSize})}>{size} см.</li>
           )}
-
         </ul>
       </div>
-      <div className="pizza-block__bottom">
-        <div className="pizza-block__price">от {price} ₽</div>
-        <button onClick={() => setPizzaQuantity((prev) => prev + 1)} className="button button--outline button--add">
+      <div className="pizzaBlock__bottom">
+        <div className="pizzaBlock__price">от {price} ₽</div>
+        <button onClick={onAddClick} className="button button--outline button--add">
           <svg
             width="12"
             height="12"
@@ -52,7 +67,9 @@ const PizzaBlock = ({title, price, imageUrl, types, sizes, category, rating}) =>
             />
           </svg>
           <span>Добавить</span>
-          <i>{pizzaQuantity}</i>
+          {
+            pizzaQuantity > 0 && <i>{pizzaQuantity}</i>
+          }
         </button>
       </div>
     </div>

@@ -1,6 +1,7 @@
 @import '../variables';
 
 .button {
+  position: relative;
   display: inline-block;
   background-color: $orange;
   border-radius: 30px;
@@ -69,7 +70,8 @@
     }
 
     &:hover {
-      background-color: $orange;
+      background-color: lightsalmon;
+
 
       &,
       span {

@@ -2,13 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-import {BrowserRouter, createBrowserRouter, RouterProvider} from "react-router-dom";
-import NotFound from "./pages/404";
-import Cart from "./pages/Cart";
-import Home from "./pages/Home";
+import {BrowserRouter} from "react-router-dom";
 import {configureStore} from "@reduxjs/toolkit";
 import filterSlice from "./redux/store/filterSlice";
 import {Provider} from "react-redux";
+import cartSlice from "./redux/store/cartSlice";
+import pizzaSlice from "./redux/store/pizzaSlice";
+
+const store = configureStore({
+    reducer: {
+      filters: filterSlice,
+      cart: cartSlice,
+      pizza: pizzaSlice,
+    }
+  }
+)
+
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <App/>
+      </BrowserRouter>
+    </ Provider>
+  )
+
+
 
 // const router = createBrowserRouter([
 //   {
@@ -32,21 +50,6 @@ import {Provider} from "react-redux";
 //   },
 // ]);
 
-const store = configureStore({
-    reducer: {
-      filters: filterSlice
-    }
-  }
-)
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App/>
-    </BrowserRouter>
-  </ Provider>
-)
-
 
 // ReactDOM.createRoot(document.getElementById("root")).render(
 // <React.StrictMode>
@@ -54,3 +57,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 // <App/>
 // </React.StrictMode>
 // );
+
+
+
+
+

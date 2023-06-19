@@ -1,18 +1,39 @@
-import {useState} from "react";
+import { useRef, useState} from "react";
 import classNames from 'classnames';
 import {useDispatch, useSelector} from "react-redux";
 import {setSort} from "../redux/store/filterSlice";
 import {sortTypes} from "../consts";
 
 function Sort() {
+  const sortDivRef = useRef(null)
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch()
-  const currentSortType = useSelector(state=>state.filters.sort)
+  const currentSortType = useSelector(state => state.filters.sort)
+
+
+  const onSortChosen = (sortType) => {
+    dispatch(setSort(sortType))
+    setOpen(false)
+  }
+
+  const onSortClick = (e) => {
+    setOpen((prev) => !prev)
+
+    const onDocClick = (e) => {
+      const insideModal = e.composedPath().includes(sortDivRef.current)
+      if (!insideModal) {
+        setOpen(false)
+        document.removeEventListener('click', onDocClick)
+      }
+    }
+    document.addEventListener('click', onDocClick)
+  }
+
   return (
 
-    <div className="sort">
-      <div onClick={() => setOpen((prev) => !prev)} className="sort__label">
+    <div className="sort" ref={sortDivRef}>
+      <div onClick={onSortClick} className="sort__label">
         <svg className={classNames({
           "openIcon": !open
         })}
@@ -40,7 +61,7 @@ function Sort() {
               sortTypes.map((sortType, ind) => {
                   return <li
                     key={ind}
-                    onClick={() => dispatch(setSort(sortType))}
+                    onClick={() => onSortChosen(sortType)}
                     className={classNames({"active": sortType.value === currentSortType.value})}>{sortType.name}</li>
                 }
               )

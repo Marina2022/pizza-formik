@@ -1,5 +1,5 @@
 import s from './Search.module.scss';
-import {useCallback, useRef, useState} from "react";
+import {ChangeEventHandler, useCallback, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setSearch} from "../../redux/store/filterSlice";
 // @ts-ignore
@@ -18,7 +18,7 @@ const Search = () => {
     dispatch(setSearch(str))
   }, 300), [])
 
-  const onSearchChange = (e:any) => {
+  const onSearchChange:ChangeEventHandler<HTMLInputElement> = (e) => {
     lazySearchHandler(e.target.value)
     setVal(e.target.value)
 

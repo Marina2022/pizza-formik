@@ -2,7 +2,7 @@ import {useDispatch} from "react-redux";
 import {minus, plus, removeProduct} from "../../redux/store/cartSlice";
 import React from 'react';
 
-type ProductType = {
+export type ProductType = {
   id: string;
   title: string;
   price: number;

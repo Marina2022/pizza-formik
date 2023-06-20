@@ -7,7 +7,7 @@ import {GlobalState} from '../index';
 
 const Sort: React.FC = () => {
 
-  const sortDivRef = useRef(null)
+  const sortDivRef = useRef<HTMLDivElement | null>(null)
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch()
@@ -24,15 +24,15 @@ const Sort: React.FC = () => {
     setOpen(false)
   }
 
-  const onSortClick = (e: any) => {
+  const onSortClick = (e: React.MouseEvent<HTMLDivElement>) => {
     setOpen((prev) => !prev)
 
-    const onDocClick = (e: any) => {
-      const insideModal = e.composedPath().includes(sortDivRef.current)
-      if (!insideModal) {
-        setOpen(false)
-        document.removeEventListener('click', onDocClick)
-      }
+    const onDocClick = (e: MouseEvent) => {
+        const insideModal = sortDivRef.current && e.composedPath().includes(sortDivRef.current!)
+        if (!insideModal) {
+          setOpen(false)
+          document.removeEventListener('click', onDocClick)
+        }
     }
     document.addEventListener('click', onDocClick)
   }

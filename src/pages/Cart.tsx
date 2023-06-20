@@ -1,6 +1,6 @@
 import emptyCard from "../assets/img/empty-cart.png"
 import classNames from "classnames";
-import CartItem from "../components/CartItem/CartItem";
+import CartItem, {ProductType} from "../components/CartItem/CartItem";
 import {Link, Outlet} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {clearProducts} from "../redux/store/cartSlice";
@@ -40,7 +40,7 @@ const Cart:React.FC = () => {
             </div>
             <div className="content__items">
               {
-                products.map((product:any) => <CartItem product={product} key={product.id} />)
+                products.map((product:ProductType) => <CartItem product={product} key={product.id} />)
               }
 
             </div>

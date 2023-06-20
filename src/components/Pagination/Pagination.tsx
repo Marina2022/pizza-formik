@@ -13,7 +13,7 @@ const Pagination = () => {
   const pageCount = Math.ceil(  itemsNumber / 8)
   const itemsPerPage = 8
 
-  const handlePageClick = (event:any) => {
+  const handlePageClick: (selectedItem: {selected: number}) => void = (event) => {
     dispatch(setCurrentPage(event.selected))
   };
 

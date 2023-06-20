@@ -1,26 +1,33 @@
-import { useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import classNames from 'classnames';
 import {useDispatch, useSelector} from "react-redux";
 import {setSort} from "../redux/store/filterSlice";
 import {sortTypes} from "../consts";
+import {GlobalState} from '../index';
 
-function Sort() {
+const Sort: React.FC = () => {
+
   const sortDivRef = useRef(null)
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch()
-  const currentSortType = useSelector(state => state.filters.sort)
+  const currentSortType = useSelector((state: GlobalState) => state.filters.sort)
 
+  type SortTypeType = {
+    name: string;
+    value: string;
+    order: string;
+  }
 
-  const onSortChosen = (sortType) => {
+  const onSortChosen = (sortType: SortTypeType) => {
     dispatch(setSort(sortType))
     setOpen(false)
   }
 
-  const onSortClick = (e) => {
+  const onSortClick = (e: any) => {
     setOpen((prev) => !prev)
 
-    const onDocClick = (e) => {
+    const onDocClick = (e: any) => {
       const insideModal = e.composedPath().includes(sortDivRef.current)
       if (!insideModal) {
         setOpen(false)
@@ -31,7 +38,6 @@ function Sort() {
   }
 
   return (
-
     <div className="sort" ref={sortDivRef}>
       <div onClick={onSortClick} className="sort__label">
         <svg className={classNames({
@@ -49,7 +55,7 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>{sortTypes[currentSortType.name]}</span>
+        <span>{currentSortType.name}</span>
       </div>
 
       {

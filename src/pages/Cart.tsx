@@ -4,12 +4,13 @@ import CartItem from "../components/CartItem/CartItem";
 import {Link, Outlet} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {clearProducts} from "../redux/store/cartSlice";
+import React from 'react';
+import {GlobalState} from '../index';
 
-const Cart = () => {
+const Cart:React.FC = () => {
 
-
-  const totalCount = useSelector(state => state.cart.totalCount)
-  const totalPrice = useSelector(state => state.cart.totalPrice)
+  const totalCount = useSelector((state: GlobalState) => state.cart.totalCount)
+  const totalPrice = useSelector((state: GlobalState) => state.cart.totalPrice)
 
   const empty = totalCount === 0
 
@@ -19,7 +20,7 @@ const Cart = () => {
     if (window.confirm('Точно все из корзины удалить?')) dispatch(clearProducts())
   }
 
-  const products = useSelector(state => state.cart.products)
+  const products = useSelector((state: GlobalState) => state.cart.products)
 
   return (
     <>
@@ -39,7 +40,7 @@ const Cart = () => {
             </div>
             <div className="content__items">
               {
-                products.map((product) => <CartItem product={product} key={product.id} />)
+                products.map((product:any) => <CartItem product={product} key={product.id} />)
               }
 
             </div>

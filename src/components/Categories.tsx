@@ -1,17 +1,20 @@
 import classNames from 'classnames';
 import {useDispatch, useSelector} from "react-redux";
 import {setCategory} from "../redux/store/filterSlice";
+import {GlobalState} from '../index';
+import React from 'react';
 
 
-function Categories() {
+const Categories:React.FC = () => {
 
   const cats = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']
 
   const dispatch = useDispatch()
 
-  const currentCat = useSelector(state=>state.filters.cat)
+  const currentCat = useSelector((state: GlobalState) => state.filters.cat)
 
-  const onCatClick = (index) =>{
+  const onCatClick = (index: number) => {
+    //@ts-ignore
     dispatch(setCategory(index))
   }
 
@@ -20,7 +23,7 @@ function Categories() {
       <ul>
         {cats.map((cat, index) => {
           return (
-            <li onClick={()=>onCatClick(index)} key={index} className={classNames({
+            <li onClick={() => onCatClick(index)} key={index} className={classNames({
               'active': index === currentCat,
             })}>{cat}</li>
           )

@@ -1,6 +1,6 @@
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
-import PizzaBlock from "../components/Pizza-block/Pizza-block";
+import PizzaBlock, {PizzaBlockType} from "../components/Pizza-block/Pizza-block";
 import Skeleton from "../components/Pizza-block/Skeleton";
 import {useEffect, useRef} from "react";
 import Pagination from "../components/Pagination/Pagination";
@@ -12,15 +12,16 @@ import {setCategory, setCurrentPage, setSearch, setSort} from "../redux/store/fi
 import {sortTypes} from "../consts";
 import {setPizzas} from "../redux/store/pizzaSlice";
 import React from 'react'
+import {GlobalState} from '../index';
 
 const Home = () => {
-  const searchValue = useSelector(state => state.filters.search)
-  const isLoading = useSelector(state => state.pizza.isLoading)
+  const searchValue = useSelector((state: GlobalState) => state.filters.search)
+  const isLoading = useSelector((state: GlobalState) => state.pizza.isLoading)
 
-  const currentSortType = useSelector(state => state.filters.sort)
-  const currentPage = useSelector(state => state.filters.currentPage)
+  const currentSortType = useSelector((state: GlobalState) => state.filters.sort)
+  const currentPage = useSelector((state: GlobalState) => state.filters.currentPage)
 
-  const currentCat = useSelector(state => state.filters.cat)
+  const currentCat = useSelector((state: GlobalState) => state.filters.cat)
 
 
   const dispatch = useDispatch()
@@ -28,7 +29,7 @@ const Home = () => {
   const isMounted = useRef(false)
   const isUrlFromSearchParams = useRef(true)
 
-  const pizzas = useSelector(state => state.pizza.pizzas)
+  const pizzas = useSelector((state: GlobalState) => state.pizza.pizzas)
 
   useEffect(() => {
       // в адресную строку пишем параметры в зависимости от выбранных фильтров
@@ -48,6 +49,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!isUrlFromSearchParams.current) {  // при НЕ первом рендере берем параметры из редакса
+      // @ts-ignore
       dispatch(setPizzas({currentCat, currentSortType, searchValue, currentPage}))
       window.scrollTo(0, 0);
       isMounted.current = true // первый рендер позади
@@ -63,9 +65,13 @@ const Home = () => {
         return item.value === searchParams.sortBy
       })
       if (!sortType) sortType = sortTypes[0]
+      //@ts-ignore
       dispatch(setCategory(searchParams.category ? Number(searchParams.category) : 0))
+      //@ts-ignore
       dispatch(setSort(sortType))
+      //@ts-ignore
       dispatch(setSearch(searchParams.search ? searchParams.search : ''))
+      //@ts-ignore
       dispatch(setCurrentPage(searchParams.page ? searchParams.page - 1 : 0))
       isUrlFromSearchParams.current = false
     }
@@ -90,12 +96,12 @@ const Home = () => {
 
           {
             isLoading === 'loading' ? [...new Array(8)].map((item, ind) => <Skeleton
-              key={ind}/>) : pizzas.map((pizza, ind) =>
+              key={ind}/>) : pizzas.map((pizza:PizzaBlockType, ind) =>
               <PizzaBlock {...pizza} key={ind}/>)
           }
         </div>
 
-        <Pagination items={pizzas}/>
+        <Pagination/>
       </div>
 
     </>)

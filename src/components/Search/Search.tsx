@@ -2,31 +2,33 @@ import s from './Search.module.scss';
 import {useCallback, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setSearch} from "../../redux/store/filterSlice";
+// @ts-ignore
 import debounce from 'lodash.debounce';
+import {GlobalState} from '../../index';
 
 const Search = () => {
 
-  const searchValue = useSelector(state => state.filters.search)
+  const searchValue = useSelector((state:GlobalState )=> state.filters.search)
   const dispatch = useDispatch()
 
   const [val, setVal] = useState('')
 
-
+// @ts-ignore
   const lazySearchHandler = useCallback(debounce((str) => {
     dispatch(setSearch(str))
   }, 300), [])
 
-  const onSearchChange = (e) => {
+  const onSearchChange = (e:any) => {
     lazySearchHandler(e.target.value)
     setVal(e.target.value)
 
   }
 
-  const searchRef = useRef(null)
+  const searchRef = useRef<HTMLInputElement | null>(null)
 
   const onCancelClick = () => {
     dispatch(setSearch(''))
-    searchRef.current.focus()
+    searchRef.current?.focus()
     setVal('')
   }
 

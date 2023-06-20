@@ -3,10 +3,11 @@ import {Link} from "react-router-dom";
 import {motion} from "framer-motion"
 import Search from "./Search/Search";
 import {useSelector} from "react-redux";
+import {GlobalState} from '../index';
 
 function Header() {
-  const totalCount = useSelector(state=>state.cart.totalCount)
-  const totalPrice = useSelector(state=>state.cart.totalPrice)
+  const totalCount = useSelector((state: GlobalState) => state.cart.totalCount)
+  const totalPrice = useSelector((state: GlobalState) => state.cart.totalPrice)
 
   return (
     <div className="header">
@@ -29,7 +30,7 @@ function Header() {
             </div>
           </div>
         </Link>
-        <Search />
+        <Search/>
         <div className="header__cart">
           <Link to="cart" className="button button--cart">
             <span>{totalPrice} ₽</span>

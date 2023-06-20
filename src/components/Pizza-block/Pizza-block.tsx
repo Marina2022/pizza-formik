@@ -1,12 +1,13 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {pizzaTypes} from "../../consts";
 import classNames from 'classnames';
 import {useDispatch} from "react-redux";
 import {addProduct} from "../../redux/store/cartSlice";
 import {Link} from "react-router-dom";
 
-const PizzaBlock = ({id, title, price, imageUrl, types, sizes, category, rating}) => {
+export type PizzaBlockType = {id: string, title: string, price:number, imageUrl: string, types: number[], sizes: number[]}
 
+const PizzaBlock: React.FC<PizzaBlockType> = ({id, title, price, imageUrl, types, sizes}) => {
 
   const [pizzaQuantity, setPizzaQuantity] = useState(0);
   const [pizzaType, setPizzaType] = useState(0);
@@ -14,10 +15,10 @@ const PizzaBlock = ({id, title, price, imageUrl, types, sizes, category, rating}
 
   const dispatch = useDispatch()
 
-  const onPizzaTypeClick = (type) => {
+  const onPizzaTypeClick = (type: number) => {
     setPizzaType(type);
   }
-  const onSizeClick = (size) => {
+  const onSizeClick = (size: number) => {
     setCurrentSize(size);
   }
 

@@ -18,6 +18,8 @@ const store = configureStore({
   }
 )
 
+export type GlobalState = ReturnType<typeof store.getState>
+
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <BrowserRouter>

@@ -1,13 +1,38 @@
 import logo from "../assets/img/pizza-logo.svg";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {motion} from "framer-motion"
 import Search from "./Search/Search";
-import {useSelector} from "react-redux";
-import {GlobalState} from '../index';
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from '../index';
+import {useEffect, useRef} from 'react'
+import {setCart} from '../redux/store/cartSlice';
 
 function Header() {
-  const totalCount = useSelector((state: GlobalState) => state.cart.totalCount)
-  const totalPrice = useSelector((state: GlobalState) => state.cart.totalPrice)
+  const totalCount = useSelector((state: RootState) => state.cart.totalCount)
+  const totalPrice = useSelector((state: RootState) => state.cart.totalPrice)
+  const {pathname} = useLocation()
+
+
+  const isMounted2 = useRef(false)
+
+  const cart = useSelector((state: RootState) => state.cart.products)
+
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    const cart = localStorage.getItem('cart')
+
+    if (cart) {
+      dispatch(setCart(JSON.parse(cart)))
+    }
+  },[])
+
+  useEffect(() => {
+    if (isMounted2.current) {
+      localStorage.setItem('cart', JSON.stringify(cart))
+    }
+    isMounted2.current = true
+  }, [cart])
 
   return (
     <div className="header">
@@ -30,8 +55,8 @@ function Header() {
             </div>
           </div>
         </Link>
-        <Search/>
-        <div className="header__cart">
+        {pathname !== '/cart' && pathname !== '/form' && pathname !== '/formtsx' && <Search/>}
+        {pathname !== '/cart' && pathname !== '/form' && <div className="header__cart">
           <Link to="cart" className="button button--cart">
             <span>{totalPrice} ₽</span>
             <div className="button__delimiter"></div>
@@ -66,7 +91,7 @@ function Header() {
             </svg>
             <span>{totalCount}</span>
           </Link>
-        </div>
+        </div>}
       </div>
     </div>
   );

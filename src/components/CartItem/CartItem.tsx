@@ -11,6 +11,7 @@ export type ProductType = {
   size: string;
   count: number
 }
+
 type CartItemProps = {
   product: ProductType
 }

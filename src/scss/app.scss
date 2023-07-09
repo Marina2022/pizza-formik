@@ -335,7 +335,6 @@ body {
   }
 }
 
-
 .cart {
   .content__items {
     display: block;
@@ -346,4 +345,9 @@ button {
   padding: 0;
   outline: 0;
   border: 0;
+}
+
+.error {
+  color: crimson;
+  font-size: 20px;
 }

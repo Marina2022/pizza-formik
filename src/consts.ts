@@ -18,6 +18,5 @@ export const sortTypes = [
     value: 'title',
     order: 'asc',
   },
-
 ]
 

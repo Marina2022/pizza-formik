@@ -10,14 +10,11 @@ const Pizza: React.FC = () => {
     price: number,
     imageUrl: string,
     title: string
-
   }
+
   const [pizzaData, setPizzaData] = useState<PizzaData | null>(null)
-
   const navigate = useNavigate()
-
   useEffect(() => {
-
     const fetchPizza = async () => {
       try {
         const pizzaData = await axios.get('https://647794b29233e82dd53be1a1.mockapi.io/items/' + id)

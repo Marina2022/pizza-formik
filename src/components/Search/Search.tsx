@@ -1,24 +1,21 @@
 import s from './Search.module.scss';
 import {ChangeEventHandler, useCallback, useRef, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setSearch} from "../../redux/store/filterSlice";
 // @ts-ignore
 import debounce from 'lodash.debounce';
-import {GlobalState} from '../../index';
 
 const Search = () => {
 
-  const searchValue = useSelector((state:GlobalState )=> state.filters.search)
   const dispatch = useDispatch()
 
   const [val, setVal] = useState('')
 
-// @ts-ignore
-  const lazySearchHandler = useCallback(debounce((str) => {
-    dispatch(setSearch(str))
-  }, 300), [])
+  const lazySearchHandler = useCallback(
+    debounce((str: string) => dispatch(setSearch(str)), 300),
+    [])
 
-  const onSearchChange:ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     lazySearchHandler(e.target.value)
     setVal(e.target.value)
 

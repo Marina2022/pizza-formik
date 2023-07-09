@@ -5,28 +5,28 @@ import {Link, Outlet} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {clearProducts} from "../redux/store/cartSlice";
 import React from 'react';
-import {GlobalState} from '../index';
+import {AppDispatch, RootState} from '../index';
 
-const Cart:React.FC = () => {
+const Cart: React.FC = () => {
 
-  const totalCount = useSelector((state: GlobalState) => state.cart.totalCount)
-  const totalPrice = useSelector((state: GlobalState) => state.cart.totalPrice)
+  const totalCount = useSelector((state: RootState) => state.cart.totalCount)
+  const totalPrice = useSelector((state: RootState) => state.cart.totalPrice)
 
   const empty = totalCount === 0
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const onClearCart = () => {
     if (window.confirm('Точно все из корзины удалить?')) dispatch(clearProducts())
   }
 
-  const products = useSelector((state: GlobalState) => state.cart.products)
+  const products = useSelector((state: RootState) => state.cart.products)
 
   return (
     <>
       <div className="content">
         <div className="container--cart">
-          <Outlet />
+          <Outlet/>
 
           {!empty && <div className="cart">
             <div className="cart__top">
@@ -40,7 +40,7 @@ const Cart:React.FC = () => {
             </div>
             <div className="content__items">
               {
-                products.map((product:ProductType) => <CartItem product={product} key={product.id} />)
+                products.map((product: ProductType) => <CartItem product={product} key={product.id}/>)
               }
 
             </div>

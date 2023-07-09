@@ -4,7 +4,7 @@ import PizzaBlock, {PizzaBlockType} from "../components/Pizza-block/Pizza-block"
 import Skeleton from "../components/Pizza-block/Skeleton";
 import {useEffect, useRef} from "react";
 import Pagination from "../components/Pagination/Pagination";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
 import * as qs from "qs";
 import {useNavigate} from "react-router-dom";
@@ -12,24 +12,22 @@ import {setCategory, setCurrentPage, setSearch, setSort} from "../redux/store/fi
 import {sortTypes} from "../consts";
 import {setPizzas} from "../redux/store/pizzaSlice";
 import React from 'react'
-import {GlobalState} from '../index';
+import {RootState, useAppDispatch} from '../index';
 
 const Home = () => {
-  const searchValue = useSelector((state: GlobalState) => state.filters.search)
-  const isLoading = useSelector((state: GlobalState) => state.pizza.isLoading)
+  const searchValue = useSelector((state: RootState) => state.filters.search)
+  const isLoading = useSelector((state: RootState) => state.pizza.isLoading)
 
-  const currentSortType = useSelector((state: GlobalState) => state.filters.sort)
-  const currentPage = useSelector((state: GlobalState) => state.filters.currentPage)
+  const currentSortType = useSelector((state: RootState) => state.filters.sort)
+  const currentPage = useSelector((state: RootState) => state.filters.currentPage)
 
-  const currentCat = useSelector((state: GlobalState) => state.filters.cat)
+  const currentCat = useSelector((state: RootState) => state.filters.cat)
+  const navigate = useNavigate()
 
-
-  const dispatch = useDispatch()
-
+  const dispatch = useAppDispatch()
   const isMounted = useRef(false)
   const isUrlFromSearchParams = useRef(true)
-
-  const pizzas = useSelector((state: GlobalState) => state.pizza.pizzas)
+  const pizzas = useSelector((state: RootState) => state.pizza.pizzas)
 
   useEffect(() => {
       // в адресную строку пишем параметры в зависимости от выбранных фильтров
@@ -44,17 +42,19 @@ const Home = () => {
         navigate('?' + string)
       }
     },
-    [currentCat, currentSortType, searchValue, currentPage]
+    [currentCat, currentSortType, searchValue, currentPage, navigate]
   )
 
   useEffect(() => {
+    console.log('да')
     if (!isUrlFromSearchParams.current) {  // при НЕ первом рендере берем параметры из редакса
-      // @ts-ignore
+
       dispatch(setPizzas({currentCat, currentSortType, searchValue, currentPage}))
       window.scrollTo(0, 0);
       isMounted.current = true // первый рендер позади
     }
-  }, [currentCat, currentSortType, searchValue, currentPage])
+  }, [currentCat, currentSortType, searchValue, currentPage, dispatch])
+
 
   useEffect(() => {
     const searchParams = qs.parse(window.location.search.substring(1))
@@ -65,20 +65,14 @@ const Home = () => {
         return item.value === searchParams.sortBy
       })
       if (!sortType) sortType = sortTypes[0]
-      //@ts-ignore
       dispatch(setCategory(searchParams.category ? Number(searchParams.category) : 0))
-      //@ts-ignore
       dispatch(setSort(sortType))
-      //@ts-ignore
-      dispatch(setSearch(searchParams.search ? searchParams.search : ''))
-      //@ts-ignore
-      dispatch(setCurrentPage(searchParams.page ? searchParams.page - 1 : 0))
+      dispatch(setSearch(searchParams.search ? String(searchParams.search) : ''))
+      dispatch(setCurrentPage(searchParams.page ? Number(searchParams.page) - 1 : 0))
       isUrlFromSearchParams.current = false
     }
 
-  }, [])
-
-  const navigate = useNavigate()
+  }, [dispatch])
 
   return (
     <>
